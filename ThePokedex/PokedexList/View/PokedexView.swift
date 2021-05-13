@@ -8,12 +8,16 @@
 import SwiftUI
 
 struct PokedexView: View {
+    @ObservedObject var viewModel = PokedexViewViewModel()
     var body: some View {
         NavigationView {
             ScrollView {
-                PokedexGrid()
+                PokedexGrid(pokemons: viewModel.pokemons) { pokemon in
+                    print(pokemon.type)
+                }
             }
-        }.navigationTitle("Pokedex")
+            .navigationBarTitle(Text("Kanto Pokedex"))
+        }
     }
 }
 

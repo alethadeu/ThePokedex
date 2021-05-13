@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
-import URLImage
+import SDWebImageSwiftUI
 
 struct PokemonCell: View {
     let pokemon: Pokemon
+    var clickOnCell: (_ pokemon: Pokemon) -> Void
+
     var body: some View {
         ZStack {
             VStack(alignment: .leading) {
@@ -21,22 +23,21 @@ struct PokemonCell: View {
                 
                 HStack {
                     VStack(spacing: 15) {
-                        ForEach(pokemon.type, id: \.self) { type in
-                            TypeChips(text: type.rawValue)
-                        }
+                        TypeChips(text: pokemon.type.capitalized)
                     }
-                    URLImage(pokemon.photoURL) { image in
-                        image
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 68, height: 68)
-                            .padding([.bottom, .trailing], 4)
-                    }
+                    WebImage(url: pokemon.photoURL)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 68, height: 68)
+                        .padding([.bottom, .trailing], 4)
                 }
             }
         }
-        .background(Color.green)
+        .background(Color(pokemon.colorType))
         .cornerRadius(12)
+        .onTapGesture {
+            self.clickOnCell(pokemon)
+        }
     }
 }
 
@@ -45,7 +46,9 @@ struct PokemonCell: View {
 struct PokemonCell_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            PokemonCell(pokemon: MOCK_POKEMON[0])
+            PokemonCell(pokemon: MOCK_POKEMON[0]) { pokemon in
+                print(pokemon.name)
+            }
         }
     }
 }

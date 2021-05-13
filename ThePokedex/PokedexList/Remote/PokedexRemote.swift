@@ -16,14 +16,15 @@ class PokedexRemote {
             switch result {
             
             case .success(payload: let successData):
-                guard let data = successData.data else {
+                guard let data = successData.data?.parseData(removeString: "null,") else {
                     completion(.failure(error: .pokedexError))
                     return 
                 }
                 do {
                     let pokedex = try [Pokemon].decode(data: data )
                     completion(.success(payload: pokedex))
-                } catch {
+                } catch let error {
+                    print(error.localizedDescription)
                     completion(.failure(error: .pokedexError))
                 }
                 
@@ -38,5 +39,14 @@ class PokedexRemote {
                 }
             }
         }
+    }
+}
+
+extension Data {
+    func parseData(removeString string: String) -> Data? {
+        let dataAsString = String(data: self, encoding: .utf8)
+        let parsedDataString = dataAsString?.replacingOccurrences(of: string, with: "")
+        guard let data = parsedDataString?.data(using: .utf8) else { return nil }
+        return data
     }
 }

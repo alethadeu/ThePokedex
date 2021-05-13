@@ -6,10 +6,11 @@
 //
 
 import Foundation
+import UIKit
 
 enum Type: String, Codable {
     case normal = "normal"
-    case fight = "fight"
+    case fighting = "fighting"
     case flying = "flying"
     case posion = "poison"
     case ground = "ground"
@@ -26,4 +27,14 @@ enum Type: String, Codable {
     case dragon = "dragon"
     case dark = "dark"
     case fairy = "fairy"
+    
+    var name: String {
+        return self.rawValue.capitalized
+    }
+    
+    var color: UIColor? {
+        let typeValue = self.rawValue.capitalized
+        let colorString = "color\(typeValue)"
+        return UIColor(named: colorString)
+    }
 }

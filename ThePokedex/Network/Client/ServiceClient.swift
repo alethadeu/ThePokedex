@@ -80,3 +80,13 @@ enum FailureReason: Int, Error {
     case noNetwork      = 0
 }
 
+
+extension Data {
+    func printJSON()
+        {
+            if let JSONString = String(data: self, encoding: String.Encoding.utf8)
+            {
+                print(JSONString)
+            }
+        }
+}

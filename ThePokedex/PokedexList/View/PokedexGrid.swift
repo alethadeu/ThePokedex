@@ -8,19 +8,26 @@
 import SwiftUI
 
 struct PokedexGrid: View {
+    var pokemons: [Pokemon]
+    var clickOnCell: (_ pokemon: Pokemon) -> Void
+    
     private let gridItems = [GridItem(.flexible()), GridItem(.flexible())]
     
     var body: some View {
         LazyVGrid(columns: gridItems, spacing: 16){
-            ForEach(0..<151) { _ in
-                PokemonCell(pokemon: MOCK_POKEMON[0])
+            ForEach(pokemons) { pokemon in
+                PokemonCell(pokemon: pokemon) { pokemon in
+                    clickOnCell(pokemon)
+                }
             }
-        }
+        }.padding([.leading, .trailing], 8)
     }
 }
 
 struct PokedexGrid_Previews: PreviewProvider {
     static var previews: some View {
-        PokedexGrid()
+        PokedexGrid(pokemons: MOCK_POKEMON) { pokemon in
+            print(pokemon.name)
+        }
     }
 }

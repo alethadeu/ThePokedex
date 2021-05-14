@@ -10,7 +10,7 @@ import SDWebImageSwiftUI
 
 struct PokemonCell: View {
     let pokemon: Pokemon
-    var clickOnCell: (_ pokemon: Pokemon) -> Void
+    //var clickOnCell: (_ pokemon: Pokemon) -> Void
 
     var body: some View {
         ZStack {
@@ -35,9 +35,6 @@ struct PokemonCell: View {
         }
         .background(Color(pokemon.colorType))
         .cornerRadius(12)
-        .onTapGesture {
-            self.clickOnCell(pokemon)
-        }
     }
 }
 
@@ -46,9 +43,7 @@ struct PokemonCell: View {
 struct PokemonCell_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            PokemonCell(pokemon: MOCK_POKEMON[0]) { pokemon in
-                print(pokemon.name)
-            }
+            PokemonCell(pokemon: MOCK_POKEMON[0])
         }
     }
 }

@@ -12,9 +12,7 @@ struct PokedexView: View {
     var body: some View {
         NavigationView {
             ScrollView {
-                PokedexGrid(pokemons: viewModel.pokemons) { pokemon in
-                    print(pokemon.type)
-                }
+                PokedexGrid(pokemons: viewModel.pokemons)
             }
             .navigationBarTitle(Text("Kanto Pokedex"))
         }

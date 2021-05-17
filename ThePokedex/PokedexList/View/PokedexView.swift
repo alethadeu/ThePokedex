@@ -9,13 +9,22 @@ import SwiftUI
 
 struct PokedexView: View {
     @ObservedObject var viewModel = PokedexViewViewModel()
+    @Namespace var animation
     var body: some View {
-        NavigationView {
+        ZStack {
             ScrollView {
-                PokedexGrid(pokemons: viewModel.pokemons)
+                PokedexGrid(pokemons: viewModel.pokemons, animation: animation)
+                    .environmentObject(viewModel)
             }
-            .navigationBarTitle(Text("Kanto Pokedex"))
-        }
+            
+            if viewModel.show {
+                PokemonDetailView(pokemon: viewModel.selectPokemon, animation: animation)
+                    .environmentObject(viewModel)
+            }
+        }.onAppear {
+            self.viewModel.fetchPokemons()
+        }.padding(.vertical)
+        .background(Color.white)
     }
 }
 

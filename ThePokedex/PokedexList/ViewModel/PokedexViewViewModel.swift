@@ -11,11 +11,9 @@ import SwiftUI
 class PokedexViewViewModel: ObservableObject {
     private let getPokedexUseCase = GetPokedexUseCase()
     @Published var pokemons = [Pokemon]()
-    
-    init() {
-        fetchPokemons()
-    }
-    
+    @Published var selectPokemon = Pokemon(id: 0, name: "", imageUrl: "", type: "", description: "", height: 0, weight: 0, attack: 0, defense: 0)
+    @Published var show = false
+
     func fetchPokemons() {
         self.getPokedexUseCase.getPokedex { result in
             switch result {

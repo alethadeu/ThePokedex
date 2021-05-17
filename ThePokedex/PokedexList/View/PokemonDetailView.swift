@@ -10,22 +10,33 @@ import SDWebImageSwiftUI
 
 struct PokemonDetailView: View {
     let pokemon: Pokemon
+    var animation: Namespace.ID
+    @EnvironmentObject var viewModel: PokedexViewViewModel
     
     var body: some View {
         ZStack {
             LinearGradient(gradient: Gradient(colors: [Color(pokemon.colorType), .white]), startPoint: .top, endPoint: .bottom).ignoresSafeArea()
             Color.white.offset(y: 300)
+                .matchedGeometryEffect(id: "bg_\(pokemon.id)", in: animation)
             
             ScrollView {
                 WebImage(url: pokemon.photoURL)
                     .resizable()
                     .frame(width: 200, height: 200)
+                    .matchedGeometryEffect(id: "image_\(pokemon.id)", in: animation)
+                    .gesture(
+                        DragGesture(minimumDistance: 0).onEnded { _ in
+                            withAnimation(.spring()) {
+                                viewModel.show = false
+                            }
+                    })
                 
                 VStack {
                     Text(pokemon.name.capitalized)
                         .font(.largeTitle)
                         .padding(.top, 40)
                         .foregroundColor(.black)
+                        
                       
                     
                     Text(pokemon.type.capitalized)
@@ -34,6 +45,7 @@ struct PokemonDetailView: View {
                         .padding(.init(top: 8, leading: 24, bottom: 8, trailing: 24))
                         .background(Color(pokemon.colorType))
                         .cornerRadius(20)
+                       
                     
                     Text(pokemon.description)
                         .padding(.horizontal)
@@ -64,11 +76,11 @@ struct PokemonDetailView: View {
     }
 }
 
-struct PokemonDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            PokemonDetailView(pokemon: MOCK_POKEMON[0])
-            PokemonDetailView(pokemon: MOCK_POKEMON[0])
-        }
-    }
-}
+//struct PokemonDetailView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        Group {
+//            PokemonDetailView(pokemon: MOCK_POKEMON[0])
+//            PokemonDetailView(pokemon: MOCK_POKEMON[0])
+//        }
+//    }
+//}

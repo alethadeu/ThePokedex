@@ -17,7 +17,7 @@ class PokedexDetailViewMode: ObservableObject {
                                              height: 0,
                                              weight: 0,
                                              attack: 0,
-                                             defense: 0)
+                                             defense: 0, evolutionChain: [])
     
     @Published var show = false
 }

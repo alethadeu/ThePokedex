@@ -10,11 +10,12 @@ import SDWebImageSwiftUI
 
 struct PokedexDetailV2: View {
     var pokemon: Pokemon
+    var evolutions: [Pokemon]
     var animation: Namespace.ID
     @EnvironmentObject var viewModel: PokedexViewViewModel
     
-    @State var showStats = false
-    @State var showAbout = true
+    @State var showStats = true
+    @State var showAbout = false
     @State var showEvolution = false
     
     var body: some View {
@@ -27,6 +28,8 @@ struct PokedexDetailV2: View {
                     aboutSection
                 } else if showStats {
                     statsSection
+                } else if showEvolution {
+                    evolutionSection
                 }
             }
         }
@@ -178,18 +181,67 @@ struct PokedexDetailV2: View {
                 .font(.title2)
                 .bold()
                 .foregroundColor(.red)
-            
-            BarChartView(pokemon: pokemon)
-                .padding([.leading, .trailing], -50)
-            
-        }.padding(.all)
+                .padding(.leading, 10)
+                
+           BarChartView(pokemon: pokemon)
+            .padding( [.leading, .trailing], -50)
+        }
+        .padding(.all)
+    }
+    
+    var evolutionSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Evolution")
+                .font(.title2)
+                .bold()
+                .foregroundColor(.red)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            VStack(alignment: .leading) {
+                ForEach(evolutions) { evolution in
+                    let index = evolutions.firstIndex(where: { $0.name == evolution.name })
+                    
+                    if index == 0 && evolution.name != pokemon.name {
+                        HStack(alignment: .center, spacing: 10) {
+                            WebImage(url: pokemon.photoURL)
+                                .resizable()
+                                .frame(width: 100, height: 100, alignment: .center)
+                           Rectangle()
+                            .fill(Color.gray.opacity(0.5))
+                            .frame(height: 2)
+                            .cornerRadius(10)
+                            .padding(4)
+                            WebImage(url: evolution.photoURL)
+                                .resizable()
+                                .frame(width: 100, height: 100, alignment: .center)
+                        }.padding(.horizontal, 32)
+                    }
+                    
+                    if index == 1 {
+                        HStack(alignment: .center, spacing: 10) {
+                            WebImage(url: evolutions[0].photoURL)
+                                .resizable()
+                                .frame(width: 100, height: 100, alignment: .center)
+                           Rectangle()
+                            .fill(Color.gray.opacity(0.5))
+                            .frame(height: 2)
+                            .cornerRadius(10)
+                            .padding(4)
+                            WebImage(url: evolution.photoURL)
+                                .resizable()
+                                .frame(width: 100, height: 100, alignment: .center)
+                        }.padding(.horizontal, 32)
+                    }
+                }
+            }
+        }
+        .padding(.all)
     }
 }
 
 struct PokedexDetailV2_Previews: PreviewProvider {
     @Namespace static var animation
     static var previews: some View {
-        PokedexDetailV2(pokemon: MOCK_POKEMON[0], animation: animation)
+        PokedexDetailV2(pokemon: MOCK_POKEMON[0], evolutions: [MOCK_POKEMON[1], MOCK_POKEMON[1]], animation: animation)
     }
 }
 

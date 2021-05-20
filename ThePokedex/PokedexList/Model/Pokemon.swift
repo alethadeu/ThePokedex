@@ -8,6 +8,12 @@
 import Foundation
 import UIKit
 
+
+struct EvolutionChain: Codable, Identifiable {
+    let id: String
+    let name: String
+}
+
 struct Pokemon: Codable, Identifiable {
     let id: Int
     let name: String
@@ -18,7 +24,7 @@ struct Pokemon: Codable, Identifiable {
     let weight: Int
     let attack: Int
     let defense: Int
-    
+    let evolutionChain: [EvolutionChain]?
     var photoURL: URL {
         return URL(string: imageUrl)!
     }
@@ -50,7 +56,7 @@ let MOCK_POKEMON: [Pokemon] = [
             height: 7,
             weight: 69,
             attack: 49,
-            defense: 49),
+            defense: 49, evolutionChain: []),
     
     Pokemon(id: 2,
             name: "Bulbassaur",
@@ -60,6 +66,6 @@ let MOCK_POKEMON: [Pokemon] = [
             height: 7,
             weight: 69,
             attack: 49,
-            defense: 49),
+            defense: 49, evolutionChain: []),
 
 ]

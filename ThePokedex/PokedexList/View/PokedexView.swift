@@ -18,7 +18,7 @@ struct PokedexView: View {
             }
             
             if viewModel.show {
-                PokedexDetailV2(pokemon: viewModel.selectPokemon, animation: animation)
+                PokedexDetailV2(pokemon: viewModel.selectPokemon, evolutions: viewModel.loadEvolutionForSelectPokemon(), animation: animation)
                     .environmentObject(viewModel)
             }
             

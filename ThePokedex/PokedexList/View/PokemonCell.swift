@@ -7,9 +7,9 @@
 
 import SwiftUI
 import SDWebImageSwiftUI
+
 struct PokemonCell: View {
     
-
     let pokemon: Pokemon
     var animation: Namespace.ID
     

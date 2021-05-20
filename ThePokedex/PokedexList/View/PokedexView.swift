@@ -13,23 +13,39 @@ struct PokedexView: View {
     var body: some View {
         ZStack {
             ScrollView {
-                PokedexGrid(pokemons: viewModel.pokemons, animation: animation)
-                    .environmentObject(viewModel)
+                PokedexHeaderView()
+                list.padding(.horizontal)
             }
             
             if viewModel.show {
-                PokemonDetailView(pokemon: viewModel.selectPokemon, animation: animation)
+                PokedexDetailV2(pokemon: viewModel.selectPokemon, animation: animation)
                     .environmentObject(viewModel)
             }
+            
         }.onAppear {
             self.viewModel.fetchPokemons()
-        }.padding(.vertical)
-        .background(Color.white)
+        }
+        .background(Color(.white).edgesIgnoringSafeArea(.all))
+    }
+    
+    
+    var list: some View {
+        ForEach(viewModel.pokemons) { pokemon in
+            PokemonCardView(pokemon: pokemon, animation: animation)
+                .padding(.horizontal, 8)
+                .onTapGesture {
+                    withAnimation(.spring()) {
+                        viewModel.selectPokemon = pokemon
+                        viewModel.show = true
+                    }
+                }
+        }
     }
 }
 
 struct PokedexView_Previews: PreviewProvider {
     static var previews: some View {
         PokedexView()
+            .preferredColorScheme(.dark)
     }
 }

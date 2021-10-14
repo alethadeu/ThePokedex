@@ -12,6 +12,7 @@ struct PokedexDetailV2: View {
     var pokemon: Pokemon
     var evolutions: [Pokemon]
     var animation: Namespace.ID
+    
     @EnvironmentObject var viewModel: PokedexViewViewModel
     
     @State var showStats = true

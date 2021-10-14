@@ -13,14 +13,18 @@ class GetPokedexUseCase {
     typealias getPokedexCompletion = (_ result: getPokedexResult) -> Void
     private let pokedexRemote = PokedexRemote()
     
-    func getPokedex(completion: @escaping getPokedexCompletion) {
-        pokedexRemote.getPokedex { result in
+    func getPokedex() async throws -> getPokedexResult {
+        do {
+            let result = try await pokedexRemote.getPokedex()
             switch result {
             case .success(payload: let pokemons):
-                completion(.success(payload: pokemons))
+                return .success(payload: pokemons)
             case .failure(error: let pokedexNetworkError):
-                completion(.failure(error: pokedexNetworkError))
+                return .failure(error: pokedexNetworkError)
             }
+        } catch {
+            return .failure(error: PokedexNetworkError.pokedexError)
         }
+    
     }
 }

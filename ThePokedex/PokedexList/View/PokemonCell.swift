@@ -16,6 +16,7 @@ struct PokemonCell: View {
     //var clickOnCell: (_ pokemon: Pokemon) -> Void
 
     var body: some View {
+        
         ZStack {
             VStack(alignment: .leading) {
                 Text(pokemon.name.capitalized)

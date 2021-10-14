@@ -27,11 +27,11 @@ struct BarView: View {
 
                 ZStack(alignment: .leading) {
                     Capsule()
-                        .frame(width: 180, height: 20).animation(.default)
+                        .frame(width: 180, height: 20).animation(.default, value: 1)
                         .foregroundColor(Color(UIColor(red: 0.90, green: 0.90, blue: 0.92, alpha: 1.00)))
 
                     Capsule()
-                        .frame(width: value > 250 ? CGFloat(200) : CGFloat(value), height: 20).animation(.default)
+                        .frame(width: value > 250 ? CGFloat(200) : CGFloat(value), height: 20).animation(.default, value: 1)
                         .foregroundColor(color)
                 }
                 Spacer()

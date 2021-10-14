@@ -9,37 +9,37 @@ import Foundation
 
 class PokedexRemote {
     typealias getPokedexResult = Result<[Pokemon], PokedexNetworkError>
-    typealias getPokedexCompletion =  (_ result: getPokedexResult) -> Void
     
-    func getPokedex(completion: @escaping getPokedexCompletion) {
-        ServiceClient().doRequest(router: PokedexRouter.getPokedex) { result in
-            switch result {
-            
-            case .success(payload: let successData):
-                guard let data = successData.data?.parseData(removeString: "null,") else {
-                    completion(.failure(error: .pokedexError))
-                    return 
-                }
-                do {
-                    let pokedex = try [Pokemon].decode(data: data )
-                    completion(.success(payload: pokedex))
-                } catch let error {
-                    print(error.localizedDescription)
-                    completion(.failure(error: .pokedexError))
-                }
-                
-            case .failure(error: let failureReason):
-                switch failureReason {
-                case .noNetwork:
-                    completion(.failure(error: .noConnection))
-                case .badRequest, .unAuthorized:
-                    completion(.failure(error: .pokedexError))
-                case .notFound:
-                    completion(.failure(error: .pokedexNotFound))
-                }
+    func getPokedex() async throws -> getPokedexResult {
+        do {
+            let request = try await ServiceClient().doRequest(router: PokedexRouter.getPokedex)
+            switch request {
+                case .success(payload: let successData):
+                    guard let data = successData.data?.parseData(removeString: "null,") else {
+                        return .failure(error: .pokedexError)
+                    }
+                    do {
+                        let pokedex = try [Pokemon].decode(data: data )
+                       return .success(payload: pokedex)
+                    } catch let error {
+                        print(error.localizedDescription)
+                        return .failure(error: .pokedexError)
+                    }
+                case .failure(error: let failureReason):
+                    switch failureReason {
+                        case .noNetwork:
+                         return .failure(error: .noConnection)
+                        case .badRequest, .unAuthorized:
+                           return .failure(error: .pokedexError)
+                        case .notFound:
+                          return .failure(error: .pokedexNotFound)
+                    }
             }
+        } catch {
+            return .failure(error: .pokedexError)
         }
     }
+    
 }
 
 extension Data {

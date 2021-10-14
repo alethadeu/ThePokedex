@@ -15,8 +15,9 @@ class PokedexViewViewModel: ObservableObject {
     @Published var show = false
     
 
-    func fetchPokemons() {
-        self.getPokedexUseCase.getPokedex { result in
+    func fetchPokemons() async {
+        do {
+            let result = try await self.getPokedexUseCase.getPokedex()
             switch result {
             case .success(payload: let pokemons):
                 DispatchQueue.main.async {
@@ -25,7 +26,11 @@ class PokedexViewViewModel: ObservableObject {
             case .failure(error: let pokedexError):
                 print(pokedexError.localizedDescription)
             }
+            
+        } catch let err  {
+            print(err.localizedDescription)
         }
+    
     }
     
     func loadEvolutionForSelectPokemon() -> [Pokemon] {

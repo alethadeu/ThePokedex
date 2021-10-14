@@ -25,7 +25,7 @@ struct PokemonCardView: View {
                 
                 VStack(alignment: .leading) {
                     Text(pokemon.name.capitalized)
-                        .font(.title)
+                        .font(.title2)
                         .foregroundColor(.white)
                         .fontWeight(.bold)
                     Text(pokemon.type.capitalized)

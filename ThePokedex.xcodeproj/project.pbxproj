@@ -637,7 +637,7 @@
 				DEVELOPMENT_TEAM = RLM7JB39FN;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ThePokedex/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -659,7 +659,7 @@
 				DEVELOPMENT_TEAM = RLM7JB39FN;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ThePokedex/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -802,7 +802,7 @@
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
 			requirement = {
 				kind = exactVersion;
-				version = 5.4.3;
+				version = 5.4.4;
 			};
 		};
 		EF22DA4C264D9043007030EE /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {

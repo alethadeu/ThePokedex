@@ -18,39 +18,40 @@ import Alamofire
 
 class ServiceClient  {
     typealias requestResult = Result<SuccessData<Data>, FailureReason>
-    typealias requestCompletion = (_ result: requestResult) -> Void
     
-    func doRequest(router: RouterProtocol, completion: @escaping requestCompletion) {
-        if NetworkState.isConnected() {
-            AF.request(router)
-                .validate()
-                .responseJSON { response  in
-                    self.logRequestAndResponse(request: response.request, response: response.response)
-                    switch response.result  {
-                    case .success:
-                        if let statusCode = response.response?.statusCode {
-                            guard let data = response.data else {
-                                let successData = SuccessData<Data>(successCode: statusCode, data: nil)
-                                completion(.success(payload: successData))
+    func doRequest(router: RouterProtocol) async throws  -> requestResult {
+            try await withUnsafeThrowingContinuation { continuation in
+                AF.request(router)
+                    .validate()
+                    .responseJSON { response  in
+                        self.logRequestAndResponse(request: response.request, response: response.response)
+                        switch response.result  {
+                        case .success:
+                            if let statusCode = response.response?.statusCode {
+                                guard let data = response.data else {
+                                    let successData = SuccessData<Data>(successCode: statusCode, data: nil)
+                                   
+                                    continuation.resume(returning: .success(payload: successData))
+                                    return
+                                }
+                                let successData = SuccessData<Data>(successCode: statusCode, data: data)
+                                continuation.resume(returning: .success(payload: successData))
                                 return
                             }
-                            let successData = SuccessData<Data>(successCode: statusCode, data: data)
-                            completion(.success(payload: successData))
+            
+                            
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode, let reason = FailureReason(rawValue: statusCode) {
+                                continuation.resume(returning: .failure(error: reason))
+                                return
+                            } else {
+                                continuation.resume(returning: .failure(error: .badRequest))
+                                return
+                            }
                         }
-        
-                        
-                    case .failure(_):
-                        if let statusCode = response.response?.statusCode, let reason = FailureReason(rawValue: statusCode) {
-                            completion(.failure(error: reason))
-                        } else {
-                            completion(.failure(error: .badRequest))
-                        }
-                    }
+                }
             }
-        } else {
-            completion(.failure(error: .noNetwork))
         }
-    }
     
     func logRequestAndResponse(request: URLRequest?, response: HTTPURLResponse? ) {
         if let request = request {

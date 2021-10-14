@@ -10,6 +10,7 @@ import SwiftUI
 struct PokedexView: View {
     @ObservedObject var viewModel = PokedexViewViewModel()
     @Namespace var animation
+    
     var body: some View {
         ZStack {
             ScrollView {
@@ -23,7 +24,9 @@ struct PokedexView: View {
             }
             
         }.onAppear {
-            self.viewModel.fetchPokemons()
+            Task {
+                await self.viewModel.fetchPokemons()
+            }
         }
         .background(Color(.white).edgesIgnoringSafeArea(.all))
     }
